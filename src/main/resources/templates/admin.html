@@ -1,0 +1,297 @@
+<head>
+    <style>
+body {background-color: AntiqueWhite;}
+h2   {color: black;}
+h3  {color: black;}
+p    {color: black;}
+table {color: black;}
+a {color: DarkGoldenRod;}
+label {color: DarkGoldenRod;}
+
+
+*{
+font-family: 'Roboto';font-weight:500;
+}
+
+*{
+text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  margin: 10px;
+  padding: 0px;
+  overflow: hidden;
+  background-color: AntiqueWhite;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  background-color: MidnightBlue;
+  display: block;
+  color: GoldenRod;
+  text-align: left;
+  padding: 8px 12px;
+  text-decoration: none;
+  font-size: 16px;
+  border-bottom: 2px solid #DAA520;
+}
+
+
+
+li a:hover {
+  background-color: GoldenRod;
+  transition-duration: 0.3s;
+
+  color: MidnightBlue;
+}
+
+.logoImage {
+display: block;
+margin-left: auto;
+margin-right: right;
+padding-right: 30px;
+position: fixed;
+top: 15;
+right: 70;
+}
+
+
+.button {
+  background-color: #191970;
+  border: none;
+  color: GoldenRod;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+
+
+}
+
+.log_off_button {border-radius: 4px;}
+.log_off_button {border: 2px solid #DAA520;}
+
+.log_off_button {
+  transition-duration: 0.2s;
+}
+
+.log_off_button {
+position: fixed;
+top: 600;
+left: 8;
+}
+
+.log_off_button:hover {
+  background-color: #DAA520;
+  color: MidnightBlue;
+}
+
+
+</style>
+</head>
+
+<body>
+<div>
+
+
+
+    <ul>
+        <li><a class="active" href="http://localhost:8080/profile">Profile</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+
+
+    <img class="logoImage" src="https://i.ibb.co/gT356Lc/circle-cropped-2.png" alt="circle-cropped-2" border="0">
+
+    <button class="button log_off_button" type="button" id="logoffButton" onclick="log_off()">LOGOFF</button>
+
+    <label for="select"></label><br>
+    <input type="text" id="select" name="select"><br>
+
+    <label for="adminkey"></label><br>
+    <input type="text" id="adminkey" name="adminkey"><br>
+
+    <button class="button delete_button" type="button" id="delete_button" onclick="delete_user()">DELETE</button>
+    <button class="button delete_button" type="button" id="role_button" onclick="change_role()">CHANGE ROLE</button>
+    <button class="button key_button" type="button" id="key_button" onclick="change_key()">CHANGE KEY</button>
+
+
+<h3 id="user_info"></h3>
+
+
+</div>
+</body>
+<script>
+
+document.addEventListener( "DOMContentLoaded", generate_table(), false );
+document.addEventListener( "DOMContentLoaded", check_access(), false );
+
+function check_access (){
+        var json_url = "http://localhost:8080/restrict";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText)
+                if (data.status == "restrict"){
+                 window.location.href = "http://localhost:8080/home";
+                }
+             }
+            }
+            xhr.send();
+         }
+
+
+
+function generate_table() {
+        var json_url = "http://localhost:8080/users";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+         var data = JSON.parse(this.responseText)
+         var body = document.getElementsByTagName("body")[0];
+         var tbl = document.createElement("table");
+         var tblBody = document.createElement("tbody");
+
+     for (var i = 0; i < data.length; i++) {
+
+      var row = document.createElement("tr");
+      var cell1 = document.createElement("td");
+      var cell2 = document.createElement ("td");
+
+      if (data[i].name=="null"){
+      continue;
+      }
+
+      var cellName = document.createTextNode(data[i].name);
+      var cellContact = document.createTextNode(data[i].contact);
+
+
+      cell1.appendChild(cellName);
+      cell2.appendChild(cellContact);
+
+      row.appendChild(cell1);
+      row.appendChild(cell2);
+      tblBody.appendChild(row);
+
+        row.onclick = show_info;
+
+  }
+
+  tbl.appendChild(tblBody);
+  body.appendChild(tbl);
+  tbl.setAttribute("border", "2");
+  tbl.id = "tabela";
+
+
+}}
+
+xhr.send();
+}
+
+function show_info() {
+
+
+        const tbody = document.querySelector('#tabela tbody');
+
+        tbody.addEventListener('click', function (e) {
+
+        const row = e.target.closest('tr');
+        const cell = e.target.closest('td');
+
+        var userObject = {"firstname": cell.innerHTML};
+
+        console.log(userObject);
+        document.getElementById("user_info").innerHTML = row.innerHTML;
+
+
+});
+
+}
+
+function delete_user () {
+
+    var json_url = "http://localhost:8080/delete";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"username":document.getElementById("select").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
+
+function change_role () {
+ var json_url = "http://localhost:8080/changerole";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"username":document.getElementById("select").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
+
+function change_key(){
+
+        var json_url = "http://localhost:8080/changekey";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"adminkey":document.getElementById("adminkey").value};
+
+        xhr.send(JSON.stringify(userObject))
+
+}
+
+
+
+function log_off(){
+
+        var json_url = "http://localhost:8080/profile/logoff";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                   if(data.cookieStatus=="erased"){
+                   location.reload();
+                   window.location.href = "http://localhost:8080/home";
+                   } else if (data.cookieStatus=="created"){
+
+                   }
+                   }
+            }
+        xhr.send();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

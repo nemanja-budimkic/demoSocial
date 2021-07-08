@@ -1,0 +1,279 @@
+<head>
+    <style>
+body {background-color: AntiqueWhite;}
+h2   {color: black;}
+h3  {color: black;}
+p    {color: black;}
+table {color: black;}
+a {color: DarkGoldenRod;}
+label {color: DarkGoldenRod;}
+
+
+*{
+font-family: 'Roboto';font-weight:500;
+}
+
+*{
+text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  margin: 10px;
+  padding: 0px;
+  overflow: hidden;
+  background-color: AntiqueWhite;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  background-color: MidnightBlue;
+  display: block;
+  color: GoldenRod;
+  text-align: left;
+  padding: 8px 12px;
+  text-decoration: none;
+  font-size: 16px;
+  border-bottom: 2px solid #DAA520;
+}
+
+
+
+li a:hover {
+  background-color: GoldenRod;
+  transition-duration: 0.3s;
+
+  color: MidnightBlue;
+}
+
+.logoImage {
+display: block;
+margin-left: auto;
+margin-right: right;
+padding-right: 30px;
+position: fixed;
+top: 15;
+right: 70;
+}
+
+
+.button {
+  background-color: #191970;
+  border: none;
+  color: GoldenRod;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+
+
+}
+
+.log_off_button {border-radius: 4px;}
+.log_off_button {border: 2px solid #DAA520;}
+
+.log_off_button {
+  transition-duration: 0.2s;
+}
+
+.log_off_button {
+position: fixed;
+top: 600;
+left: 8;
+}
+
+.log_off_button:hover {
+  background-color: #DAA520;
+  color: MidnightBlue;
+}
+
+.admin_button {border-radius: 4px;}
+.admin_button {border: 2px solid #DAA520;}
+
+.admin_button {
+  transition-duration: 0.2s;
+}
+
+.admin_button {
+position: fixed;
+top: 600;
+left: 120;
+}
+
+.admin_button:hover {
+  background-color: #DAA520;
+  color: MidnightBlue;
+}
+
+
+</style>
+</head>
+
+<body>
+<div>
+
+
+
+    <ul>
+        <li><a class="active" href="http://localhost:8080/profile">Profile</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+
+
+    <img class="logoImage" src="https://i.ibb.co/gT356Lc/circle-cropped-2.png" alt="circle-cropped-2" border="0">
+
+    <button class="button log_off_button" type="button" id="logoffButton" onclick="log_off()">LOGOFF</button>
+
+    <button class="button role_button" type="button" id="roleButton" onclick="read_role()">ROLE</button>
+
+
+
+            <h3 id="userrole"></h3>
+
+
+</div>
+</body>
+<script>
+
+document.addEventListener( "DOMContentLoaded", generate_table(), false );
+document.addEventListener( "DOMContentLoaded", check_access(), false );
+
+function check_access (){
+        var json_url = "http://localhost:8080/restrict";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText)
+                if (data.status == "restrict"){
+                 window.location.href = "http://localhost:8080/home";
+                }
+             }
+            }
+            xhr.send();
+         }
+
+
+
+ function go_to_reg(){
+          window.location.href = "http://localhost:8080/register";
+   }
+
+   function go_to_admin(){
+    window.location.href = "http://localhost:8080/admin";
+   }
+
+function read_role () {
+
+
+        var json_url = "http://localhost:8080/profile";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+
+                    if (data.userrole == "adminRole"){
+                    window.location.href = "http://localhost:8080/admin";
+                    }
+                    document.getElementById("userrole").innerHTML = "role:" + " " + data.userrole;
+                   }
+            }
+
+        xhr.send();
+}
+
+
+
+
+
+
+function generate_table() {
+
+
+        var json_url = "http://localhost:8080/users";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+
+        xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+        var data = JSON.parse(this.responseText)
+
+         var body = document.getElementsByTagName("body")[0];
+         var tbl = document.createElement("table");
+         var tblBody = document.createElement("tbody");
+
+         for (var i = 0; i < data.length; i++) {
+
+      var row = document.createElement("tr");
+      var cell = document.createElement("td");
+
+      var cellName = document.createTextNode(JSON.stringify(data[i].name));
+      var cellContact = document.createTextNode(JSON.stringify(data[i].contact));
+
+      cell.appendChild(cellName);
+      cell.appendChild(cellContact)
+      row.appendChild(cell);
+
+      tblBody.appendChild(row);
+  }
+  tbl.appendChild(tblBody);
+  body.appendChild(tbl);
+  tbl.setAttribute("border", "2");
+}}
+xhr.send();
+}
+
+function log_off(){
+
+
+        var json_url = "http://localhost:8080/profile/logoff";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                   if(data.cookieStatus=="erased"){
+                   location.reload();
+                   window.location.href = "http://localhost:8080/home";
+                   } else if (data.cookieStatus=="created"){
+
+                   }
+                   }
+            }
+
+
+        xhr.send();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

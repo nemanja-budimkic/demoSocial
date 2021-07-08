@@ -1,0 +1,132 @@
+<head>
+    <style>
+body {background-color: AntiqueWhite;}
+h2   {color: Black;}
+h3  {color: DarkGoldenRod;}
+p    {color: DarkGoldenRod;}
+table {color: DarkGoldenRod;}
+a {color: DarkGoldenRod;}
+label {color: DarkGoldenRod;}
+
+*{
+font-family: 'Roboto';font-weight:500;
+}
+
+*{
+text-align: center;
+}
+
+.button {
+  background-color: #191970;
+  border: none;
+  color: GoldenRod;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.p {
+display: block;
+text-align:center;
+}
+
+.log_in_button {border-radius: 4px;}
+.log_in_button {border: 2px solid #DAA520;}
+
+.log_in_button {
+  transition-duration: 0.2s;
+}
+
+.log_in_button:hover {
+  background-color: #DAA520;
+  color: MidnightBlue;
+}
+
+.log_in_button {width: 110px;}
+
+.register_button {border-radius: 4px;}
+.register_button {border: 2px solid #DAA520;}
+
+.register_button {
+  transition-duration: 0.2s;
+}
+
+.register_button:hover {
+  background-color: #DAA520;
+  color: MidnightBlue;
+}
+
+.register_button {width: 125px;}
+
+.logoImage {
+display: block;
+margin-left: auto;
+margin-right: right;
+padding-right: 30px;
+position: fixed;
+top: 300;
+right: 566;
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+<h2>About our efforts</h2>
+
+<p>
+"Rrow itself, let it be sorrow; 
+let him love it; 
+let him pursue it, ishing for its acquisitiendum. </p>
+<p>
+Because he will ab hold, unless but through concer, and also of those who resist. 
+Now a pure snore disturbeded sum dust. <br>
+He ejjnoyes, in order that somewon, also with a severe one, unless of life. 
+May a cusstums offficer somewon nothing of a poison-filled. 
+</p>
+<p>
+Until, from a twho, twho chaffinch may also pursue it, not even a lump.<br>
+But as twho, as a tank; a proverb, yeast; or else they tinscribe nor. <br>
+Yet yet dewlap bed. Twho may be, let him love fellows of a polecat. </p>
+
+<p>
+Now amour, the, twhose being, drunk, yet twhitch and, an enclosed valley's always a laugh. <br>
+In acquisitiendum the Furies are Earth; in (he takes up) a lump vehicles bien."
+</p>
+
+
+
+
+<a href="https://ibb.co/gT356Lc"><img class="logoImage" src="https://i.ibb.co/gT356Lc/circle-cropped-2.png" alt="circle-cropped-2" border="0"></a>
+
+</body>
+
+<script>
+
+ document.addEventListener( "DOMContentLoaded", check_access(), false );
+
+function check_access (){
+        var json_url = "http://localhost:8080/restrict";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText)
+                if (data.status == "restrict"){
+                 window.location.href = "http://localhost:8080/home";
+                }
+             }
+            }
+            xhr.send();
+         }
+
+
+
+</script>

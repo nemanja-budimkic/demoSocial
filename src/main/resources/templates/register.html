@@ -1,0 +1,170 @@
+<head>
+    <style>
+body {background-color: AntiqueWhite;}
+h2   {color: DarkGoldenRod;}
+h3  {color: DarkGoldenRod;}
+p    {color: DarkGoldenRod;}
+table {color: DarkGoldenRod;}
+a {color: DarkGoldenRod;}
+label {color: DarkGoldenRod;}
+
+*{
+font-family: 'Roboto';font-weight:500;
+}
+
+*{
+text-align: center;
+}
+
+.button {
+  background-color: #191970;
+  border: none;
+  color: GoldenRod;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+
+}
+
+.create_user_button {border-radius: 4px;}
+.create_user_button {border: 2px solid #DAA520;}
+
+.create_user_button {
+  transition-duration: 0.2s;
+}
+
+.create_user_button:hover {
+  background-color: #DAA520;
+  color: MidnightBlue;
+}
+
+ul {
+  list-style-type: none;
+  margin: 10px;
+  padding: 0px;
+  overflow: hidden;
+  background-color: AntiqueWhite;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  background-color: MidnightBlue;
+  display: block;
+  color: GoldenRod;
+  text-align: left;
+  padding: 8px 12px;
+  text-decoration: none;
+  font-size: 16px;
+  border-bottom: 2px solid #DAA520;
+
+
+}
+
+
+
+li a:hover {
+  background-color: GoldenRod;
+  transition-duration: 0.3s;
+
+  color: MidnightBlue;
+}
+
+.logoImage {
+display: block;
+margin-left: auto;
+margin-right: right;
+padding-right: 30px;
+position: fixed;
+top: 15;
+right: 70;
+}
+
+
+</style>
+</head>
+
+
+
+
+<body>
+<div>
+
+    <ul>
+        <li><a class="active" href="http://localhost:8080/home">Home</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+
+	<form>
+  <label for="username">USERNAME</label><br>
+  <input type="text" id="username" name="username"><br>
+
+  <label for="password">PASSWORD</label><br>
+  <input type="password" id="password" name="password"><br>
+
+   <br>
+
+        <label for="firstname">FIRST NAME</label><br>
+        <input type="text" id="firstname" name="firstname"><br>
+
+        <label for="lastname">LAST NAME</label><br>
+        <input type="text" id="lastname" name="lastname"><br>
+
+        <label for="contact">PHONE NUMBER</label><br>
+        <input type="text" id="contact" name="contact"><br>
+
+        <br>
+        <label for="userrole">ADMIN KEY</label><br>
+        <input type="password" id="userrole" name="userrole">
+
+</form>
+
+    <a href="http://localhost:8080/home"><img class="logoImage" src="https://i.ibb.co/gT356Lc/circle-cropped-2.png" alt="circle-cropped-2" border="0"></a>
+
+<button class="button create_user_button" type="button" id="regButton" onclick=" create_new_user();">CONFIRM</button>
+		
+    </div>
+</body>
+<script>
+
+        function create_new_user () {
+        var json_url = "http://localhost:8080/register";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        var userObject = {"username":document.getElementById("username").value,"password":document.getElementById("password").value, "firstname":document.getElementById("firstname").value, "lastname":document.getElementById("lastname").value,
+                          "contact":document.getElementById("contact").value, "userrole":document.getElementById("userrole").value};
+        console.log(userObject)
+
+         xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+           if(data.status=="false"){
+                   alert("USER ALREADY EXISTS PLEASE TRY AGAIN")
+                   } else {
+                     window.location.href = "http://localhost:8080/profile";
+                   }
+                   }
+            }
+
+        xhr.send(JSON.stringify(userObject));
+    }
+
+       function hide_password() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
+
+
+
+    </script>

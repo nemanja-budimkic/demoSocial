@@ -1,0 +1,234 @@
+<head>
+
+<style>
+body {background-color: AntiqueWhite;}
+h2   {color: Black;}
+h3  {color: Black;}
+p    {color: Black;}
+table {color: DarkGoldenRod;}
+a {color: DarkGoldenRod;}
+label {color: DarkGoldenRod;}
+
+
+*{
+font-family: 'Roboto';font-weight:500;
+}
+
+ul {
+  list-style-type: none;
+  margin: 10px;
+  padding: 0px;
+  overflow: hidden;
+  background-color: AntiqueWhite;
+  position: fixed;
+  top: 0;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  background-color: MidnightBlue;
+  display: block;
+  color: GoldenRod;
+  text-align: left;
+  padding: 8px 12px;
+  padding-left: 15px;
+  text-decoration: none;
+  font-size: 16px;
+  border-bottom: 2px solid #DAA520;
+}
+
+li a:hover {
+  background-color: GoldenRod;
+  transition-duration: 0.3s;
+  color: MidnightBlue;
+}
+
+.h2{
+text-align: left;
+}
+
+.button {
+  background-color: #191970;
+  border: none;
+  color: GoldenRod;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+
+
+}
+
+.log_off_button {border-radius: 4px;}
+.log_off_button {border: 2px solid #DAA520;}
+
+.log_off_button {
+  transition-duration: 0.2s;
+}
+
+.log_off_button {
+position: fixed;
+top: 600;
+
+}
+
+.log_off_button:hover {
+  background-color: #DAA520;
+  color: MidnightBlue;
+}
+
+
+.logoImage {
+display: block;
+margin-left: auto;
+margin-right: right;
+padding-right: 30px;
+position: fixed;
+top: 15;
+right: 70;
+}
+
+.userInfo {
+display: block;
+position: fixed;
+top: 50;
+padding-left: 15px
+
+}
+
+
+</style>
+</head>
+<body>
+
+
+<img class="logoImage" src="https://i.ibb.co/gT356Lc/circle-cropped-2.png" alt="circle-cropped-2" border="0">
+
+
+<div>
+
+    <ul>
+        <li><a class="active" href="http://localhost:8080/info">Users</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+
+
+        <div class="userInfo">
+        <h2 id="profileName"></h2>
+        <h3 id="username"></h3>
+        <h3 id="contact"></h3>
+        <h3 id="userrole"></h3>
+        </div>
+
+
+    <br>
+
+    <button class="button log_off_button" type="button" id="logoffButton" onclick="log_off()">LOGOFF</button>
+		
+    </div>
+</body>
+	<script>
+    document.addEventListener( "DOMContentLoaded", create_profile(), false );
+    document.addEventListener( "DOMContentLoaded", check_access(), false );
+
+function check_access (){
+        var json_url = "http://localhost:8080/restrict";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText)
+                if (data.status == "restrict"){
+                 window.location.href = "http://localhost:8080/home";
+                }
+             }
+            }
+            xhr.send();
+         }
+
+
+function create_profile () {
+
+        var json_url = "http://localhost:8080/profile";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+
+                   document.getElementById("profileName").innerHTML = data.firstname + " " + data.lastname;
+                   document.getElementById("username").innerHTML = "username:" + " " + data.username;
+                   document.getElementById("contact").innerHTML = "contact:" + " " + data.contact;
+                    document.getElementById("userrole").innerHTML = "role:" + " " + data.userrole;
+                   }
+            }
+
+        xhr.send();
+}
+
+function log_off(){
+
+
+        var json_url = "http://localhost:8080/profile/logoff";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                   if(data.cookieStatus=="erased"){
+                   location.reload();
+                   window.location.href = "http://localhost:8080/home";
+                   } else if (data.cookieStatus=="created"){
+
+                   }
+                   }
+            }
+
+
+        xhr.send();
+
+
+
+}
+
+
+
+
+
+</script>
+	
+
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</script>
