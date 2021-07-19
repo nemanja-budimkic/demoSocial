@@ -91,6 +91,41 @@ left: 8;
   color: MidnightBlue;
 }
 
+.dropbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
 
 </style>
 </head>
@@ -118,20 +153,31 @@ left: 8;
     <label for="adminkey"></label><br>
     <input type="text" id="adminkey" name="adminkey"><br>
 
+    <label for="positionname"></label><br>POSITION NAME
+    <input type="text" id="positionname" name="positionname"><br>
+
+    <label for="positionId"></label><br>POSITION ID
+    <input type="text" id="positionId" name="positionId"><br>
+
     <button class="button delete_button" type="button" id="delete_button" onclick="delete_user()">DELETE</button>
     <button class="button delete_button" type="button" id="role_button" onclick="change_role()">CHANGE ROLE</button>
     <button class="button key_button" type="button" id="key_button" onclick="change_key()">CHANGE KEY</button>
+    <button class="button create_position_button" type="button" id="create_position_button" onclick="create_position()">CREATE NEW POSITION</button>
+    <button class="button assign_position_button" type="button" id="assign_position_button" onclick="assign_position()">ASSIGN POSITION TO USER</button>
 
 
 <h3 id="user_info"></h3>
+
+    <h3 id="postest"></h3>
 
 
 </div>
 </body>
 <script>
 
-document.addEventListener( "DOMContentLoaded", generate_table(), false );
+document.addEventListener( "DOMContentLoaded", generate_user_table(), false );
 document.addEventListener( "DOMContentLoaded", check_access(), false );
+document.addEventListener( "DOMContentLoaded", generate_position_table(), false );
 
 function check_access (){
         var json_url = "http://localhost:8080/restrict";
@@ -151,7 +197,7 @@ function check_access (){
 
 
 
-function generate_table() {
+function generate_user_table() {
         var json_url = "http://localhost:8080/users";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
@@ -171,6 +217,7 @@ function generate_table() {
       var row = document.createElement("tr");
       var cell1 = document.createElement("td");
       var cell2 = document.createElement ("td");
+      var cell3 = document.createElement ("td");
 
       if (data[i].name=="null"){
       continue;
@@ -178,23 +225,24 @@ function generate_table() {
 
       var cellName = document.createTextNode(data[i].name);
       var cellContact = document.createTextNode(data[i].contact);
-
+      var cellPosition = document.createTextNode(data[i].position);
 
       cell1.appendChild(cellName);
       cell2.appendChild(cellContact);
+      cell3.appendChild(cellPosition);
 
       row.appendChild(cell1);
       row.appendChild(cell2);
+      row.appendChild(cell3);
       tblBody.appendChild(row);
 
-        row.onclick = show_info;
 
   }
 
   tbl.appendChild(tblBody);
   body.appendChild(tbl);
   tbl.setAttribute("border", "2");
-  tbl.id = "tabela";
+  tbl.id = "tableUsers";
 
 
 }}
@@ -202,25 +250,55 @@ function generate_table() {
 xhr.send();
 }
 
-function show_info() {
+function generate_position_table() {
+        var json_url = "http://localhost:8080/positions";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+         var data = JSON.parse(this.responseText)
+         var body = document.getElementsByTagName("body")[0];
+         var tbl = document.createElement("table");
+         var tblBody = document.createElement("tbody");
+
+     for (var i = 0; i < data.length; i++) {
+
+      var row = document.createElement("tr");
+      var cell1 = document.createElement("td");
+      var cell2 = document.createElement ("td");
+
+      if (data[i].positionname=="null"){
+      continue;
+      }
+
+      var cellName = document.createTextNode(data[i].positionname);
+      var cellId = document.createTextNode(data[i].id);
 
 
-        const tbody = document.querySelector('#tabela tbody');
-
-        tbody.addEventListener('click', function (e) {
-
-        const row = e.target.closest('tr');
-        const cell = e.target.closest('td');
-
-        var userObject = {"firstname": cell.innerHTML};
-
-        console.log(userObject);
-        document.getElementById("user_info").innerHTML = row.innerHTML;
+      cell1.appendChild(cellName);
+      cell2.appendChild (cellId)
 
 
-});
+      row.appendChild(cell1);
+      row.appendChild (cell2);
+      tblBody.appendChild(row);
 
+  }
+
+  tbl.appendChild(tblBody);
+  body.appendChild(tbl);
+  tbl.setAttribute("border", "2");
+  tbl.id = "tablePositions";
+
+}}
+
+xhr.send();
 }
+
 
 function delete_user () {
 
@@ -258,6 +336,29 @@ function change_key(){
 
 }
 
+function create_position () {
+
+        var json_url = "http://localhost:8080/newpos";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"positionname":document.getElementById("positionname").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
+
+function assign_position () {
+
+        var json_url = "http://localhost:8080/assignpos";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"username":document.getElementById("select").value, "positionid":document.getElementById("positionId").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
 
 
 function log_off(){

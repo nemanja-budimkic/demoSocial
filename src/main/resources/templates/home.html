@@ -111,9 +111,13 @@ document.addEventListener( "DOMContentLoaded", homepage_refresh(), false );
           window.location.href = "http://localhost:8080/register";
    }
 
+
+
+
+
    function log_in (){
 
-       var json_url = "http://localhost:8080/home";
+        var json_url = "http://localhost:8080/home";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
