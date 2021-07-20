@@ -137,9 +137,9 @@ left: 8;
 
     <ul>
         <li><a class="active" href="http://localhost:8080/profile">Profile</a></li>
-        <li><a href="#news">News</a></li>
+        <li><a href="http://localhost:8080/projects">Projects</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="#about">About</a></li>
+        <li><a href="http://localhost:8080/about">About</a></li>
     </ul>
 
 
@@ -166,7 +166,14 @@ left: 8;
     <button class="button assign_position_button" type="button" id="assign_position_button" onclick="assign_position()">ASSIGN POSITION TO USER</button>
 
 
-<h3 id="user_info"></h3>
+    <br>
+    <label for="team"></label><br>NEW TEAM
+    <input type="text" id="team" name="team"><br>
+
+    <button class="button create_team_button" type="button" id="create_team_button" onclick="create_team()">CREATE TEAM</button>
+
+
+    <h3 id="user_info"></h3>
 
     <h3 id="postest"></h3>
 
@@ -360,6 +367,17 @@ function assign_position () {
         xhr.send(JSON.stringify(userObject))
 }
 
+function create_team () {
+
+        var json_url = "http://localhost:8080/newteam";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"teamname":document.getElementById("team").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
 
 function log_off(){
 

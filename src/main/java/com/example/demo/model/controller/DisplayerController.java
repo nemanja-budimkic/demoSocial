@@ -30,10 +30,13 @@ public class DisplayerController {
     @Autowired
     private PositionRepository positionRepository;
 
+    @Autowired
+    private TeamRepository teamRepository;
+
 
     @GetMapping("/info")
     @ResponseBody
-    public ModelAndView profilePage () throws IOException {
+    public ModelAndView profilePage() throws IOException {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("info");
@@ -42,7 +45,7 @@ public class DisplayerController {
 
     @GetMapping("/admin")
     @ResponseBody
-    public ModelAndView adminPage () throws IOException {
+    public ModelAndView adminPage() throws IOException {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin");
@@ -50,24 +53,23 @@ public class DisplayerController {
     }
 
 
-    @PostMapping ("/users")
+    @PostMapping("/users")
     @ResponseBody
-    public void generateUserTable (HttpServletResponse response) throws IOException {
+    public void generateUserTable(HttpServletResponse response) throws IOException {
         userTableGenerator(response);
 
     }
 
-    @PostMapping ("/positions")
+    @PostMapping("/positions")
     @ResponseBody
-    public void generatePositionTable (HttpServletResponse response) throws IOException {
-      positionTableGenerator(response);
+    public void generatePositionTable(HttpServletResponse response) throws IOException {
+        positionTableGenerator(response);
     }
 
 
-
-    @GetMapping ("/rolecheck")
+    @GetMapping("/rolecheck")
     @ResponseBody
-    public void roleCheck (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void roleCheck(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Cookie[] cookies = request.getCookies();
 
@@ -87,28 +89,27 @@ public class DisplayerController {
                 loggedUsername = usersRepository.getUsernameCookie(cookieName);
                 loggedContact = usersRepository.getContactCookie(cookieName);
                 response.getWriter().write("{\"firstname\":" + "\"" + loggedName + "\"," + "\"lastname\":" + "\"" + loggedLastName + "\"," + "\"username\":" + "\"" + loggedUsername + "\"," + "\"contact\":" + "\""
-                        + loggedContact +  "\"," + "\"userrole\":" + "\"" + cookieRole + "\"}");
+                        + loggedContact + "\"," + "\"userrole\":" + "\"" + cookieRole + "\"}");
             }
         }
     }
 
-    @PostMapping ("/delete")
+    @PostMapping("/delete")
     @ResponseBody
-    public void deleteUser (@RequestBody HomeController.CreateUserRequest request) {
+    public void deleteUser(@RequestBody HomeController.CreateUserRequest request) {
 
         String deletedUser = request.getUsername();
-        int deletedUserId = usersRepository.getId(deletedUser);
         usersRepository.deleteUser(deletedUser);
 
     }
 
     @PostMapping("/changerole")
     @ResponseBody
-    public void changeRole(@RequestBody HomeController.CreateUserRequest request){
+    public void changeRole(@RequestBody HomeController.CreateUserRequest request) {
 
-        if (usersRepository.getUserRole(request.getUsername()).equals("adminRole")){
+        if (usersRepository.getUserRole(request.getUsername()).equals("adminRole")) {
             usersRepository.setUserRole(request.getUsername(), "userRole");
-        } else if (usersRepository.getUserRole(request.getUsername()).equals("userRole")){
+        } else if (usersRepository.getUserRole(request.getUsername()).equals("userRole")) {
             usersRepository.setUserRole(request.getUsername(), "adminRole");
         }
 
@@ -116,80 +117,100 @@ public class DisplayerController {
 
     @PostMapping("/changekey")
     @ResponseBody
-    public void changeKey (@RequestBody HomeController.CreateUserRequest request, HttpServletResponse response) throws IOException {
+    public void changeKey(@RequestBody HomeController.CreateUserRequest request, HttpServletResponse response) throws IOException {
 
-        if (adminRepository.getAllKeys().size()<1){
+        if (adminRepository.getAllKeys().size() < 1) {
             adminRepository.save(new AdminEntity(request.getadminkey()));
-        } else if (adminRepository.getAllKeys().size()==1) {
+        } else if (adminRepository.getAllKeys().size() == 1) {
             adminRepository.updateKey(request.getadminkey(), 1);
         }
     }
 
     @PostMapping("/newpos")
     @ResponseBody
-    public void newPos (@RequestBody HomeController.CreateUserRequest request, HttpServletResponse response) throws IOException {
-
-       positionRepository.save(new PositionEntity(request.getpositionname()));
+    public void newPos(@RequestBody HomeController.CreateUserRequest request, HttpServletResponse response) throws IOException {
+        positionRepository.save(new PositionEntity(request.getpositionname()));
     }
 
     @PostMapping("/assignpos")
     @ResponseBody
-    public void assignPos (@RequestBody HomeController.CreateUserRequest request, HttpServletResponse response) throws IOException {
+    public void assignPos(@RequestBody HomeController.CreateUserRequest request, HttpServletResponse response) throws IOException {
 
-        usersRepository.updatePosId(request.getPositionid(), request.getUsername());
+        if (positionRepository.getAllPositions() != null) {
+            usersRepository.updatePosId(request.getPositionid(), request.getUsername());
+        }
+
+    }
+
+    @PostMapping("/newteam")
+    @ResponseBody
+    public void newTeam(@RequestBody HomeController.CreateUserRequest request, HttpServletResponse response) throws IOException {
+
+        teamRepository.save(new TeamEntity(request.getTeamname()));
     }
 
 
-
-
-
-    public void userTableGenerator (HttpServletResponse response) throws IOException {
+    public void userTableGenerator(HttpServletResponse response) throws IOException {
 
         String tableFirstN;
         String tableContact;
         String userrole;
         String userPosition;
+        String userTeam;
 
         ArrayList<String> names = new ArrayList<>();
         ArrayList<String> contacts = new ArrayList<>();
         ArrayList<String> roles = new ArrayList<>();
         ArrayList<String> positions = new ArrayList<>();
+        ArrayList<String> teams = new ArrayList<>();
 
+        for (int i = 0; i <= usersRepository.getAllUsers().size() - 1; i++) {
 
-        for (int i=0; i<= usersRepository.getAllUsers().size()-1; i++){
-
-            tableFirstN =  usersRepository.getAllUsers().get(i).getUsername();
+            tableFirstN = usersRepository.getAllUsers().get(i).getUsername();
             tableContact = usersRepository.getAllUsers().get(i).getContact();
             userrole = usersRepository.getAllUsers().get(i).getUserRole();
-            userPosition = usersRepository.getAllUsers().get(i).getUserPositionname().getPositionname();
 
+
+
+            if (usersRepository.getAllUsers().get(i).getUserPositionname() != null) {
+                userPosition = usersRepository.getAllUsers().get(i).getUserPositionname().getPositionname();
+            } else {
+                userPosition = "pending";
+            }
+
+            if (usersRepository.getAllUsers().get(i).getTeamname() != null) {
+                userTeam = usersRepository.getAllUsers().get(i).getUserPositionname().getPositionname();
+            } else {
+                userTeam = "pending";
+            }
 
             names.add(tableFirstN);
             contacts.add(tableContact);
             roles.add(userrole);
             positions.add(userPosition);
+            teams.add(userTeam);
         }
 
-        for (int i = 0; i<=names.size(); i++){
+        for (int i = 0; i <= names.size(); i++) {
 
-            if (i==0) {
+            if (i == 0) {
 
                 if (usersRepository.count() == 1) {
 
                     response.getWriter().write("[{\"name\":" + "\"" + names.get(i) + "\"," + "\"contact\":" + "\"" + contacts.get(i)
-                            + "\"," +  "\"userrole\":" + "\"" + roles.get(i)  + "\"," +  "\"position\":" + "\"" + positions.get(i)  + "\"}]");
+                            + "\"," + "\"userrole\":" + "\"" + roles.get(i) + "\"," + "\"position\":" + "\"" + positions.get(i) + "\"}]");
                 } else {
                     response.getWriter().write("[{\"name\":" + "\"" + names.get(i) + "\"," + "\"contact\":" + "\"" + contacts.get(i)
-                            + "\"," + "\"userrole\":" + "\"" + roles.get(i)  + "\"," +  "\"position\":" + "\"" + positions.get(i)  + "\"},");
+                            + "\"," + "\"userrole\":" + "\"" + roles.get(i) + "\"," + "\"position\":" + "\"" + positions.get(i) + "\"},");
                 }
 
-            } else if (i>0 && i<names.size()-1){
+            } else if (i > 0 && i < names.size() - 1) {
                 response.getWriter().write("{\"name\":" + "\"" + names.get(i) + "\"," + "\"contact\":" + "\"" + contacts.get(i)
-                        +  "\"," + "\"userrole\":" + "\"" + roles.get(i) + "\"," +  "\"position\":" + "\"" + positions.get(i)  + "\"},");
+                        + "\"," + "\"userrole\":" + "\"" + roles.get(i) + "\"," + "\"position\":" + "\"" + positions.get(i) + "\"},");
 
-            } else if (i==names.size()-1){
-                response.getWriter().write("{\"name\":" + "\"" + names.get(i) + "\"," + "\"contact\":"  + "\"" + contacts.get(i)
-                        + "\"," + "\"userrole\":" + "\"" + roles.get(i)+ "\"," +  "\"position\":" + "\"" + positions.get(i)  + "\"}]");
+            } else if (i == names.size() - 1) {
+                response.getWriter().write("{\"name\":" + "\"" + names.get(i) + "\"," + "\"contact\":" + "\"" + contacts.get(i)
+                        + "\"," + "\"userrole\":" + "\"" + roles.get(i) + "\"," + "\"position\":" + "\"" + positions.get(i) + "\"}]");
 
             }
         }
@@ -197,7 +218,7 @@ public class DisplayerController {
 
     }
 
-    public void positionTableGenerator (HttpServletResponse response) throws IOException {
+    public void positionTableGenerator(HttpServletResponse response) throws IOException {
 
         String positionName;
 
@@ -206,33 +227,32 @@ public class DisplayerController {
         ArrayList<String> positions = new ArrayList<>();
         ArrayList<Integer> positionIds = new ArrayList<>();
 
-        for (int i=0; i<= positionRepository.getAllPositions().size()-1; i++){
+        for (int i = 0; i <= positionRepository.getAllPositions().size() - 1; i++) {
 
             positionName = positionRepository.getAllPositions().get(i).getPositionname();
             positionId = positionRepository.getAllPositions().get(i).getId();
-
             positions.add(positionName);
             positionIds.add(positionId);
         }
 
-        for (int i = 0; i<positions.size(); i++){
+        for (int i = 0; i < positions.size(); i++) {
 
-            if (i==0) {
+            if (i == 0) {
 
                 if (positionRepository.count() == 1) {
 
-                    response.getWriter().write("[{\"positionname\":" + "\"" + positions.get(i)  +
+                    response.getWriter().write("[{\"positionname\":" + "\"" + positions.get(i) +
                             "\"," + "\"id\":" + "\"" + positionIds.get(i) + "\"}]");
                 } else {
                     response.getWriter().write("[{\"positionname\":" + "\"" + positions.get(i) +
                             "\"," + "\"id\":" + "\"" + positionIds.get(i) + "\"},");
                 }
 
-            } else if (i>0 && i<positions.size()-1){
+            } else if (i > 0 && i < positions.size() - 1) {
                 response.getWriter().write("{\"positionname\":" + "\"" + positions.get(i) +
                         "\"," + "\"id\":" + "\"" + positionIds.get(i) + "\"},");
 
-            } else if (i==positions.size()-1){
+            } else if (i == positions.size() - 1) {
                 response.getWriter().write("{\"positionname\":" + "\"" + positions.get(i) +
                         "\"," + "\"id\":" + "\"" + positionIds.get(i) + "\"}]");
 
@@ -240,12 +260,10 @@ public class DisplayerController {
         }
 
 
-        }
-
-
-
-
     }
+
+
+}
 
 
 

@@ -83,6 +83,21 @@ public class HomeController {
 
              private int positionid;
 
+             private String teamname;
+
+             private String teamid;
+
+             private String projectname;
+
+             private int projectid;
+
+             private String clientname;
+
+             private String clientcontact;
+
+             private int clientid;
+
+
              public CreateUserRequest() {
 
              }
@@ -166,7 +181,64 @@ public class HomeController {
              public void setPositionid(int positionid) {
                  this.positionid = positionid;
              }
+
+             public String getTeamname() {
+                 return teamname;
+             }
+
+             public void setTeamname(String teamname) {
+                 this.teamname = teamname;
+             }
+
+             public String getTeamid() {
+                 return teamid;
+             }
+
+             public void setTeamid(String teamid) {
+                 this.teamid = teamid;
+             }
+
+             public String getProjectname() {
+                 return projectname;
+             }
+
+             public void setProjectname(String projectname) {
+                 this.projectname = projectname;
+             }
+
+             public int getProjectid() {
+                 return projectid;
+             }
+
+             public void setProjectid(int projectid) {
+                 this.projectid = projectid;
+             }
+
+             public String getClientname() {
+                 return clientname;
+             }
+
+             public void setClientname(String clientname) {
+                 this.clientname = clientname;
+             }
+
+             public String getClientcontact() {
+                 return clientcontact;
+             }
+
+             public void setClientcontact(String clientcontact) {
+                 this.clientcontact = clientcontact;
+             }
+
+             public int getClientid() {
+                 return clientid;
+             }
+
+             public void setClientid(int clientid) {
+                 this.clientid = clientid;
+             }
          }
+
 
 
 

@@ -1,0 +1,151 @@
+<head>
+    <style>
+body {background-color: AntiqueWhite;}
+h2   {color: Black;}
+h3  {color: DarkGoldenRod;}
+p    {color: DarkGoldenRod;}
+table {color: DarkGoldenRod;}
+a {color: DarkGoldenRod;}
+label {color: DarkGoldenRod;}
+
+*{
+font-family: 'Roboto';font-weight:500;
+}
+
+*{
+text-align: center;
+}
+
+.button {
+  background-color: #191970;
+  border: none;
+  color: GoldenRod;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.p {
+display: block;
+text-align:center;
+}
+
+
+
+
+
+</style>
+
+</head>
+
+<body>
+
+<label for="project"></label>WHAT PROJECT?<br>
+<input type="text" id="project" name="project"><br>
+
+<label for="team"></label>TO WHAT TEAM?<br>
+<input type="text" id="team" name="team"><br>
+
+<label for="create_project"></label>NEW PROJECT<br>
+<input type="text" id="create_project" name="create_project"><br>
+
+<label for="create_client_name"></label>NEW CLIENT NAME<br>
+<input type="text" id="create_client_name" name="create_client_name"><br>
+
+<label for="create_client_contact"></label>NEW CLIENT CONTACT<br>
+<input type="text" id="create_client_contact" name="create_client_contact"><br>
+
+<label for="assign_client_project"></label>TO WHAT CLIENT?<br>
+<input type="text" id="assign_client_project" name="assign_client_project"><br>
+
+<button class="button create_project_button" type="button" id="create_project_button" onclick="create_project()">CREATE NEW PROJECT</button>
+
+<br>
+<button class="button assign_project_button" type="button" id="assign_project_button" onclick="assign_project()">ASSIGN PROJECT</button>
+
+<br>
+<button class="button create_client_button" type="button" id="create_client_button" onclick="create_client()">CREATE CLIENT</button>
+
+<br>
+<button class="button assign_client_button" type="button" id="assign_client_button" onclick="assign_client()">ASSIGN CLIENT</button>
+
+
+
+</body>
+
+<script>
+
+ document.addEventListener( "DOMContentLoaded", check_access(), false );
+
+function check_access (){
+        var json_url = "http://localhost:8080/restrict";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText)
+                if (data.status == "restrict"){
+                 window.location.href = "http://localhost:8080/home";
+                }
+             }
+            }
+            xhr.send();
+         }
+
+         function create_project () {
+
+        var json_url = "http://localhost:8080/newproject";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"projectname":document.getElementById("create_project").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
+
+function assign_project () {
+
+        var json_url = "http://localhost:8080/assignproject";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"projectid":document.getElementById("project").value, "teamname":document.getElementById("team").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
+
+function create_client () {
+
+        var json_url = "http://localhost:8080/newclient";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"clientname":document.getElementById("create_client_name").value,
+                           "clientcontact": document.getElementById("create_client_contact").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
+
+function assign_client () {
+
+        var json_url = "http://localhost:8080/assignclient";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", json_url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        var userObject = {"clientid":document.getElementById("assign_client_project").value,
+                           "projectname": document.getElementById("project").value};
+
+        xhr.send(JSON.stringify(userObject))
+}
+
+
+
+
+</script>

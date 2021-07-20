@@ -100,32 +100,13 @@ Now amour, the, twhose being, drunk, yet twhitch and, an enclosed valley's alway
 In acquisitiendum the Furies are Earth; in (he takes up) a lump vehicles bien."
 </p>
 
-
-
-
 <a href="https://ibb.co/gT356Lc"><img class="logoImage" src="https://i.ibb.co/gT356Lc/circle-cropped-2.png" alt="circle-cropped-2" border="0"></a>
 
 </body>
 
 <script>
 
- document.addEventListener( "DOMContentLoaded", check_access(), false );
 
-function check_access (){
-        var json_url = "http://localhost:8080/restrict";
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", json_url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-                var data = JSON.parse(this.responseText)
-                if (data.status == "restrict"){
-                 window.location.href = "http://localhost:8080/home";
-                }
-             }
-            }
-            xhr.send();
-         }
 
 
 

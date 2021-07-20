@@ -34,12 +34,9 @@ public class UserEntity {
     private String userrole;
 
 
-
-
-
-   /* @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "teamid", referencedColumnName = "id")
-    private TeamEntity team;*/
+    private TeamEntity teamname;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "positionid", referencedColumnName = "id")
@@ -123,5 +120,13 @@ public class UserEntity {
 
     public void setPositionname(PositionEntity positionname) {
         this.positionname = positionname;
+    }
+
+    public TeamEntity getTeamname() {
+        return teamname;
+    }
+
+    public void setTeamname(TeamEntity teamname) {
+        this.teamname = teamname;
     }
 }
