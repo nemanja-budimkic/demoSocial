@@ -1,5 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.interfaces;
 
+import com.example.demo.model.AdminEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

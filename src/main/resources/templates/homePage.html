@@ -64,41 +64,34 @@ position: fixed;
 top: 300;
 right: 566;
 }
-
-
-
-</style>
-    <body>
+ </style>
+<body>
 </head>
-
 
 
 <div>
 
-    	<form>
+    <form>
 
-  <label for="fname">USERNAME</label><br>
-  <input type="text" id="fname" name="fname"><br>
+        <label for="fname">USERNAME</label><br>
+        <input type="text" id="fname" name="fname"><br>
 
-  <label for="lname">PASSWORD</label><br>
-  <input type="password" id="lname" name="lname">
+        <label for="lname">PASSWORD</label><br>
+        <input type="password" id="lname" name="lname">
 
-  <br>
-  <label for="adminKey">ADMIN KEY</label><br>
-  <input type="password" id="adminKey" name="adminKey">
+        <br>
+        <label for="adminKey">ADMIN KEY</label><br>
+        <input type="password" id="adminKey" name="adminKey">
 
 
-        </form>
+    </form>
 
     <img class="logoImage" src="https://i.ibb.co/gT356Lc/circle-cropped-2.png" alt="circle-cropped-2" border="0">
-
-
-        <button class="button log_in_button" type="button" id="logButton" onclick="log_in()">LOGIN</button>
-        <button class="button register_button" type="button" id="regButton" onclick="go_to_reg()">REGISTER</button>
+    <button class="button log_in_button" type="button" id="logButton" onclick="log_in()">LOGIN</button>
+    <button class="button register_button" type="button" id="regButton" onclick="go_to_reg()">REGISTER</button>
 
 
 </div>
-
 
 
 </body>
@@ -111,18 +104,13 @@ document.addEventListener( "DOMContentLoaded", homepage_refresh(), false );
           window.location.href = "http://localhost:8080/register";
    }
 
-
-
-
-
    function log_in (){
-
-        var json_url = "http://localhost:8080/home";
+        var json_url = "http://localhost:8080/home-page";
         var xhr = new XMLHttpRequest();
+        var userObject = {"username": document.getElementById("fname").value ,"password":document.getElementById("lname").value};
+
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        var userObject = {"username": document.getElementById("fname").value ,"password":document.getElementById("lname").value};
-        console.log(userObject)
 
          xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -130,27 +118,27 @@ document.addEventListener( "DOMContentLoaded", homepage_refresh(), false );
            if(data.status=="loginFailed"){
                    alert("INCORRECT USERNAME OR PASSWORD PLEASE TRY AGAIN")
                    } else if (data.status=="loginSuccessful")  {
-
-                        window.location.href = "http://localhost:8080/profile";
-
+                        window.location.href = "http://localhost:8080/profile-page";
+                    }
                    }
-                   }
-            }
+                  }
         xhr.send(JSON.stringify(userObject));
    }
 
    function hide_password() {
-  var x = document.getElementById("lname");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
+         var x = document.getElementById("lname");
 
-function homepage_refresh (){
+                 if (x.type === "password") {
+                        x.type = "text";
+                } else {
+                        x.type = "password";
+               }
+              }
+
+    function homepage_refresh (){
         var json_url = "http://localhost:8080/profile/logoff";
         var xhr = new XMLHttpRequest();
+
         xhr.open("GET", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -160,15 +148,8 @@ function homepage_refresh (){
                    if(data.cookieStatus=="erased"){
                    location.reload();
                    }
-                   }
+                 }
+              }
+                    xhr.send();
             }
-        xhr.send();
-}
-
-
-
-
-
-
-
 </script>

@@ -112,7 +112,7 @@ padding-left: 15px
 <div>
 
     <ul>
-        <li><a class="active" href="http://localhost:8080/info">Users</a></li>
+        <li><a class="active" href="http://localhost:8080/users-info-page">Users</a></li>
         <li><a href="#news">News</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="#about">About</a></li>
@@ -140,13 +140,14 @@ padding-left: 15px
 function check_access (){
         var json_url = "http://localhost:8080/restrict";
         var xhr = new XMLHttpRequest();
+
         xhr.open("GET", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
                 var data = JSON.parse(this.responseText)
                 if (data.status == "restrict"){
-                 window.location.href = "http://localhost:8080/home";
+                 window.location.href = "http://localhost:8080/home-page";
                 }
              }
             }
@@ -155,56 +156,41 @@ function check_access (){
 
 
 function create_profile () {
-
-        var json_url = "http://localhost:8080/profile";
+        var json_url = "http://localhost:8080/profile-page";
         var xhr = new XMLHttpRequest();
+
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-
         xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var data = JSON.parse(this.responseText);
-
                    document.getElementById("profileName").innerHTML = data.firstname + " " + data.lastname;
                    document.getElementById("username").innerHTML = "username:" + " " + data.username;
                    document.getElementById("contact").innerHTML = "contact:" + " " + data.contact;
                     document.getElementById("userrole").innerHTML = "role:" + " " + data.userrole;
                    }
             }
-
         xhr.send();
 }
 
 function log_off(){
-
-
-        var json_url = "http://localhost:8080/profile/logoff";
+        var json_url = "http://localhost:8080/logoff";
         var xhr = new XMLHttpRequest();
+
         xhr.open("GET", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-
         xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var data = JSON.parse(this.responseText);
                    if(data.cookieStatus=="erased"){
                    location.reload();
-                   window.location.href = "http://localhost:8080/home";
+                   window.location.href = "http://localhost:8080/home-page";
                    } else if (data.cookieStatus=="created"){
-
                    }
-                   }
-            }
-
-
+                 }
+              }
         xhr.send();
-
-
-
 }
-
-
-
-
 
 </script>
 	

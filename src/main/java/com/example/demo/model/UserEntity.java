@@ -1,15 +1,10 @@
 package com.example.demo.model;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import javax.persistence.*;
-
+import java.io.Serializable;
 
 @Entity
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -22,38 +17,38 @@ public class UserEntity {
     private String password;
 
     @Column
-    private String firstname;
+    private String first_name;
 
     @Column
-    private String lastname;
+    private String last_name;
 
     @Column
     private String contact;
 
     @Column
-    private String userrole;
+    private String user_role;
 
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "teamid", referencedColumnName = "id")
-    private TeamEntity teamname;
+    private TeamEntity team_name;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "positionid", referencedColumnName = "id")
-    private PositionEntity positionname;
+    private PositionEntity position_name;
 
 
     public UserEntity() {
     }
 
-    public UserEntity(String username, String password, String firstname, String lastname,
-                      String contact, String userrole) {
+    public UserEntity(String username, String password, String first_name, String last_name,
+                      String contact, String user_role) {
         this.username = username;
         this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.contact = contact;
-        this.userrole = userrole;
+        this.user_role = user_role;
     }
 
     public int getid() {
@@ -80,21 +75,20 @@ public class UserEntity {
         this.password = password;
     }
 
-
-    public String getfirstname() {
-        return firstname;
+    public String getFirstName() {
+        return first_name;
     }
 
-    public void setfirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getlastname() {
-        return lastname;
+    public String getLastName() {
+        return last_name;
     }
 
-    public void setlastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getContact() {
@@ -106,27 +100,42 @@ public class UserEntity {
     }
 
     public String getUserRole() {
-        return userrole;
+        return user_role;
     }
 
-    public void setUserRole(String userrole) {
-        this.userrole = userrole;
+    public void setUserRole(String user_role) {
+        this.user_role = user_role;
     }
-
 
     public PositionEntity getUserPositionname() {
-        return positionname;
+        return position_name;
     }
 
-    public void setPositionname(PositionEntity positionname) {
-        this.positionname = positionname;
+    public void setPositionName(PositionEntity position_name) {
+        this.position_name = position_name;
     }
 
     public TeamEntity getTeamname() {
-        return teamname;
+        return team_name;
     }
 
-    public void setTeamname(TeamEntity teamname) {
-        this.teamname = teamname;
+    public void setTeamName(TeamEntity team_name) {
+        this.team_name = team_name;
+    }
+
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", lastName='" + last_name + '\'' +
+                ", contact='" + contact + '\'' +
+                ", userRole='" + user_role + '\'' +
+                ", teamName=" + team_name +
+                ", positionName=" + position_name +
+                '}';
     }
 }

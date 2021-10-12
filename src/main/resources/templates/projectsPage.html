@@ -97,7 +97,7 @@ function check_access (){
 
          function create_project () {
 
-        var json_url = "http://localhost:8080/newproject";
+        var json_url = "http://localhost:8080/new-project";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -109,7 +109,7 @@ function check_access (){
 
 function assign_project () {
 
-        var json_url = "http://localhost:8080/assignproject";
+        var json_url = "http://localhost:8080/assign-project";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -121,7 +121,7 @@ function assign_project () {
 
 function create_client () {
 
-        var json_url = "http://localhost:8080/newclient";
+        var json_url = "http://localhost:8080/new-client";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -134,7 +134,7 @@ function create_client () {
 
 function assign_client () {
 
-        var json_url = "http://localhost:8080/assignclient";
+        var json_url = "http://localhost:8080/assign-client";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');

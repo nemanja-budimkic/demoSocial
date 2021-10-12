@@ -110,12 +110,12 @@ left: 120;
 }
 
 
-</style>
+
+    </style>
 </head>
 
 <body>
 <div>
-
 
 
     <ul>
@@ -133,8 +133,7 @@ left: 120;
     <button class="button role_button" type="button" id="roleButton" onclick="read_role()">ROLE</button>
 
 
-
-            <h3 id="userrole"></h3>
+    <h3 id="userrole"></h3>
 
 
 </div>
@@ -153,7 +152,7 @@ function check_access (){
         if (this.readyState == 4 && this.status == 200) {
                 var data = JSON.parse(this.responseText)
                 if (data.status == "restrict"){
-                 window.location.href = "http://localhost:8080/home";
+                 window.location.href = "http://localhost:8080/home-page";
                 }
              }
             }
@@ -167,13 +166,12 @@ function check_access (){
    }
 
    function go_to_admin(){
-    window.location.href = "http://localhost:8080/admin";
+    window.location.href = "http://localhost:8080/admin-page";
    }
 
 function read_role () {
 
-
-        var json_url = "http://localhost:8080/profile";
+        var json_url = "http://localhost:8080/profile-page";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -183,7 +181,7 @@ xhr.onreadystatechange = function() {
                     var data = JSON.parse(this.responseText);
 
                     if (data.userrole == "adminRole"){
-                    window.location.href = "http://localhost:8080/admin";
+                    window.location.href = "http://localhost:8080/admin-page";
                     }
                     document.getElementById("userrole").innerHTML = "role:" + " " + data.userrole;
                    }
@@ -204,7 +202,6 @@ function generate_table() {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-
 
         xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -262,6 +259,7 @@ function log_off(){
 
 
 }
+
 
 
 

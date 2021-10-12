@@ -320,7 +320,7 @@ function delete_user () {
 }
 
 function change_role () {
- var json_url = "http://localhost:8080/changerole";
+ var json_url = "http://localhost:8080/change-role";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -332,7 +332,7 @@ function change_role () {
 
 function change_key(){
 
-        var json_url = "http://localhost:8080/changekey";
+        var json_url = "http://localhost:8080/change-key";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -345,7 +345,7 @@ function change_key(){
 
 function create_position () {
 
-        var json_url = "http://localhost:8080/newpos";
+        var json_url = "http://localhost:8080/new-position";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -357,7 +357,7 @@ function create_position () {
 
 function assign_position () {
 
-        var json_url = "http://localhost:8080/assignpos";
+        var json_url = "http://localhost:8080/assign-position";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -369,7 +369,7 @@ function assign_position () {
 
 function create_team () {
 
-        var json_url = "http://localhost:8080/newteam";
+        var json_url = "http://localhost:8080/new-team";
         var xhr = new XMLHttpRequest();
         xhr.open("POST", json_url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
